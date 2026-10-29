@@ -1,6 +1,8 @@
 import logging
+from typing import TYPE_CHECKING
 
-from any_llm import AnyLLM
+if TYPE_CHECKING:
+    from any_llm import AnyLLM
 
 logger = logging.getLogger(__name__)
 
@@ -8,12 +10,14 @@ logger = logging.getLogger(__name__)
 class LLMService:
     """Light wrapper around any-llm"""
 
-    def __init__(self, *, client: AnyLLM, model: str):
+    def __init__(self, *, client: "AnyLLM", model: str):
         self.client = client
         self.model = model
 
     @classmethod
     def create(cls, *, provider: str, model: str, **kwargs) -> "LLMService":
+        from any_llm import AnyLLM
+
         client = AnyLLM.create(provider=provider, **kwargs)
         return cls(client=client, model=model)
 
